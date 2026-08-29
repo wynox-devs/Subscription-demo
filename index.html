@@ -26,16 +26,32 @@
                 <p>Select the perfect subscription plan for your needs</p>
             </div>
 
-            <!-- Username Input Section -->
+            <!-- Username & Email Input Section -->
             <div class="username-section">
-                <input 
-                    type="text" 
-                    id="usernameInput" 
-                    class="username-input" 
-                    placeholder="Enter your username"
-                    maxlength="50"
-                >
-                <span class="username-error" id="usernameError"></span>
+                <div class="input-row">
+                    <div class="username-wrap">
+                        <span class="at-prefix">@</span>
+                        <input 
+                            type="text" 
+                            id="usernameInput" 
+                            class="username-input" 
+                            placeholder="name000"
+                            maxlength="50"
+                        >
+                    </div>
+                    <span class="username-error" id="usernameError"></span>
+                </div>
+
+                <div class="input-row">
+                    <input
+                        type="email"
+                        id="emailInput"
+                        class="email-input"
+                        placeholder="example@email.com"
+                        maxlength="254"
+                    >
+                    <span class="email-error" id="emailError"></span>
+                </div>
             </div>
         </section>
 
