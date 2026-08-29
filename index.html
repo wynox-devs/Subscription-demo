@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Choose Your Plan</h1>
+            <p>Select the perfect subscription plan for your needs</p>
+        </div>
+
+        <!-- Username Input Section -->
+        <div class="username-section">
+            <input 
+                type="text" 
+                id="usernameInput" 
+                class="username-input" 
+                placeholder="Enter your username"
+                maxlength="50"
+            >
+            <span class="username-error" id="usernameError"></span>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h2>Free</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">0</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">Perfect for getting started</p>
+                <ul class="features">
+                    <li>✓ 5 GB Storage</li>
+                    <li>✓ Basic Support</li>
+                    <li>✓ 1 Project</li>
+                    <li>✗ Advanced Analytics</li>
+                    <li>✗ Priority Support</li>
+                    <li>✗ Custom Domain</li>
+                </ul>
+                <button class="subscribe-btn" onclick="handleSubscribe('Free')">Get Started</button>
+            </div>
+
+            <!-- Basic Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h2>Basic</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">9</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">For individuals and teams</p>
+                <ul class="features">
+                    <li>✓ 100 GB Storage</li>
+                    <li>✓ Email Support</li>
+                    <li>✓ 10 Projects</li>
+                    <li>✓ Basic Analytics</li>
+                    <li>✗ Priority Support</li>
+                    <li>✗ Custom Domain</li>
+                </ul>
+                <button class="subscribe-btn" onclick="handleSubscribe('Basic')">Subscribe Now</button>
+            </div>
+
+            <!-- Advanced Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h2>Advanced</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">29</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">For growing businesses</p>
+                <ul class="features">
+                    <li>✓ 500 GB Storage</li>
+                    <li>✓ Priority Email Support</li>
+                    <li>✓ 50 Projects</li>
+                    <li>✓ Advanced Analytics</li>
+                    <li>✓ Team Collaboration</li>
+                    <li>✗ Custom Domain</li>
+                </ul>
+                <button class="subscribe-btn" onclick="handleSubscribe('Advanced')">Subscribe Now</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card featured">
+                <div class="badge">POPULAR</div>
+                <div class="plan-header">
+                    <h2>Pro</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">59</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">For professionals</p>
+                <ul class="features">
+                    <li>✓ 2 TB Storage</li>
+                    <li>✓ 24/7 Phone Support</li>
+                    <li>✓ Unlimited Projects</li>
+                    <li>✓ Advanced Analytics</li>
+                    <li>✓ Priority Support</li>
+                    <li>✓ Custom Domain</li>
+                </ul>
+                <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe Now</button>
+            </div>
+
+            <!-- Max Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h2>Max</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">99</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">For enterprises</p>
+                <ul class="features">
+                    <li>✓ 5 TB Storage</li>
+                    <li>✓ Dedicated Support</li>
+                    <li>✓ Unlimited Projects</li>
+                    <li>✓ Enterprise Analytics</li>
+                    <li>✓ Priority Support</li>
+                    <li>✓ Custom Domain</li>
+                </ul>
+                <button class="subscribe-btn" onclick="handleSubscribe('Max')">Subscribe Now</button>
+            </div>
+
+            <!-- Ultra Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h2>Ultra</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">199</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">Premium everything</p>
+                <ul class="features">
+                    <li>✓ 10 TB Storage</li>
+                    <li>✓ Dedicated Account Manager</li>
+                    <li>✓ Unlimited Projects</li>
+                    <li>✓ Custom Analytics</li>
+                    <li>✓ 24/7 Priority Support</li>
+                    <li>✓ Multiple Custom Domains</li>
+                </ul>
+                <button class="subscribe-btn" onclick="handleSubscribe('Ultra')">Subscribe Now</button>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-body">
+                    <div class="success-icon">✓</div>
+                    <h2>Subscription Confirmed!</h2>
+                    <p id="confirmationMessage"></p>
+                    <button class="modal-btn" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
