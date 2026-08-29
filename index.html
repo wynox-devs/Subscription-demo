@@ -4,27 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscription Plans</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header Section -->
-        <div class="header">
-            <h1>Choose Your Plan</h1>
-            <p>Select the perfect subscription plan for your needs</p>
+    <!-- Fixed site header with logo -->
+    <header class="site-header">
+        <div class="header-inner container">
+            <div class="brand">
+                <img src="Logo.png" alt="Logo" class="logo">
+                <span class="brand-title">Subscription</span>
+            </div>
         </div>
+    </header>
 
-        <!-- Username Input Section -->
-        <div class="username-section">
-            <input 
-                type="text" 
-                id="usernameInput" 
-                class="username-input" 
-                placeholder="Enter your username"
-                maxlength="50"
-            >
-            <span class="username-error" id="usernameError"></span>
-        </div>
+    <main class="container">
+        <!-- Hero / Header Section -->
+        <section class="hero">
+            <div class="header">
+                <h1>Choose Your Plan</h1>
+                <p>Select the perfect subscription plan for your needs</p>
+            </div>
+
+            <!-- Username Input Section -->
+            <div class="username-section">
+                <input 
+                    type="text" 
+                    id="usernameInput" 
+                    class="username-input" 
+                    placeholder="Enter your username"
+                    maxlength="50"
+                >
+                <span class="username-error" id="usernameError"></span>
+            </div>
+        </section>
 
         <!-- Pricing Cards -->
         <div class="pricing-grid">
@@ -139,27 +152,6 @@
                 <button class="subscribe-btn" onclick="handleSubscribe('Max')">Subscribe Now</button>
             </div>
 
-            <!-- Ultra Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Ultra</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">199</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">Premium everything</p>
-                <ul class="features">
-                    <li>✓ 10 TB Storage</li>
-                    <li>✓ Dedicated Account Manager</li>
-                    <li>✓ Unlimited Projects</li>
-                    <li>✓ Custom Analytics</li>
-                    <li>✓ 24/7 Priority Support</li>
-                    <li>✓ Multiple Custom Domains</li>
-                </ul>
-                <button class="subscribe-btn" onclick="handleSubscribe('Ultra')">Subscribe Now</button>
-            </div>
         </div>
 
         <!-- Success Modal -->
@@ -174,7 +166,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
