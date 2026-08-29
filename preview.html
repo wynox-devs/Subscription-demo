@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Preview — Wynox Pack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: dark; }
+        html,body { height:100%; }
+        body { margin:0; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#000; color:#fff; display:flex; align-items:center; justify-content:center; }
+        .preview-shell { width:100%; max-width:900px; padding:40px; box-sizing:border-box; text-align:center; }
+        .logo-wrap { background:#0a0a0a; padding:28px; border-radius:12px; display:inline-block; }
+        .logo-large { height:140px; width:auto; display:block; margin:0 auto 18px; }
+        h1 { font-size:1.8rem; margin-bottom:8px; }
+        p.lead { color: #cbd5e1; margin-bottom:18px; }
+        .details { background: rgba(255,255,255,0.03); padding:18px; border-radius:10px; text-align:left; color:#e6eef8; }
+        .details h3 { margin-top:0; }
+        .back { display:inline-block; margin-top:20px; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,0.06); color:#fff; text-decoration:none; }
+        @media (max-width:480px){ .logo-large{height:100px;} .preview-shell{padding:20px;} }
+    </style>
+</head>
+<body>
+    <div class="preview-shell">
+        <div class="logo-wrap">
+            <img src="Logo.png" alt="Wynox Logo" class="logo-large">
+        </div>
+        <h1 id="planTitle">Preview</h1>
+        <p class="lead" id="planSubtitle">See what's included in this Wynox pack.</p>
+
+        <div class="details" id="planDetails">
+            <h3>About this pack</h3>
+            <p>This pack grants access to all Wynox services under a single account. Use the preview to confirm what is included for each plan.</p>
+            <ul id="featuresList"></ul>
+        </div>
+
+        <a class="back" href="index.html">← Back to plans</a>
+    </div>
+
+    <script>
+        // Read plan from query string and render
+        function qs(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+        const plan = qs('plan') || 'Student Pack';
+
+        const plans = {
+            'Free': { price: 0, features: ['5 GB Storage','Basic Support','1 Project'] },
+            'Basic': { price: 9, features: ['100 GB Storage','Email Support','10 Projects','Basic Analytics'] },
+            'Pro': { price: 59, features: ['2 TB Storage','24/7 Phone Support','Unlimited Projects','Advanced Analytics'] },
+            'Family': { price: 39, features: ['1 TB Shared Storage','Family Accounts','Shared Analytics'] },
+            'Student Pack': { price: 19, features: ['All Wynox services included','500 GB Storage','Student Support'] }
+        };
+
+        const data = plans[plan] || plans['Student Pack'];
+        document.getElementById('planTitle').textContent = plan;
+        document.getElementById('planSubtitle').textContent = `Price: $${data.price}/month`;
+
+        const list = document.getElementById('featuresList');
+        data.features.forEach(f => {
+            const li = document.createElement('li');
+            li.textContent = '• ' + f;
+            list.appendChild(li);
+        });
+    </script>
+</body>
+</html>

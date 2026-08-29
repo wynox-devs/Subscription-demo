@@ -13,7 +13,7 @@
         <div class="header-inner container">
             <div class="brand">
                 <img src="Logo.png" alt="Logo" class="logo">
-                <span class="brand-title">Subscription</span>
+                <span class="brand-title">Wynox Subscription</span>
             </div>
         </div>
     </header>
@@ -60,7 +60,10 @@
                     <li>✗ Priority Support</li>
                     <li>✗ Custom Domain</li>
                 </ul>
-                <button class="subscribe-btn" onclick="handleSubscribe('Free')">Get Started</button>
+                <div class="card-actions">
+                    <button class="subscribe-btn" onclick="handleSubscribe('Free')">Get Started</button>
+                    <button class="preview-btn" onclick="openPreview('Free')">Preview</button>
+                </div>
             </div>
 
             <!-- Basic Plan -->
@@ -82,29 +85,10 @@
                     <li>✗ Priority Support</li>
                     <li>✗ Custom Domain</li>
                 </ul>
-                <button class="subscribe-btn" onclick="handleSubscribe('Basic')">Subscribe Now</button>
-            </div>
-
-            <!-- Advanced Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Advanced</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">29</span>
-                        <span class="period">/month</span>
-                    </div>
+                <div class="card-actions">
+                    <button class="subscribe-btn" onclick="handleSubscribe('Basic')">Subscribe Now</button>
+                    <button class="preview-btn" onclick="openPreview('Basic')">Preview</button>
                 </div>
-                <p class="plan-description">For growing businesses</p>
-                <ul class="features">
-                    <li>✓ 500 GB Storage</li>
-                    <li>✓ Priority Email Support</li>
-                    <li>✓ 50 Projects</li>
-                    <li>✓ Advanced Analytics</li>
-                    <li>✓ Team Collaboration</li>
-                    <li>✗ Custom Domain</li>
-                </ul>
-                <button class="subscribe-btn" onclick="handleSubscribe('Advanced')">Subscribe Now</button>
             </div>
 
             <!-- Pro Plan -->
@@ -127,29 +111,60 @@
                     <li>✓ Priority Support</li>
                     <li>✓ Custom Domain</li>
                 </ul>
-                <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe Now</button>
+                <div class="card-actions">
+                    <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe Now</button>
+                    <button class="preview-btn" onclick="openPreview('Pro')">Preview</button>
+                </div>
             </div>
 
-            <!-- Max Plan -->
+            <!-- Family Plan -->
             <div class="pricing-card">
                 <div class="plan-header">
-                    <h2>Max</h2>
+                    <h2>Family</h2>
                     <div class="price">
                         <span class="currency">$</span>
-                        <span class="amount">99</span>
+                        <span class="amount">39</span>
                         <span class="period">/month</span>
                     </div>
                 </div>
-                <p class="plan-description">For enterprises</p>
+                <p class="plan-description">Share Wynox across your household</p>
                 <ul class="features">
-                    <li>✓ 5 TB Storage</li>
-                    <li>✓ Dedicated Support</li>
-                    <li>✓ Unlimited Projects</li>
-                    <li>✓ Enterprise Analytics</li>
+                    <li>✓ 1 TB Shared Storage</li>
+                    <li>✓ Family Accounts</li>
+                    <li>✓ 10 Projects</li>
+                    <li>✓ Shared Analytics</li>
                     <li>✓ Priority Support</li>
-                    <li>✓ Custom Domain</li>
+                    <li>✗ Custom Domain</li>
                 </ul>
-                <button class="subscribe-btn" onclick="handleSubscribe('Max')">Subscribe Now</button>
+                <div class="card-actions">
+                    <button class="subscribe-btn" onclick="handleSubscribe('Family')">Subscribe Now</button>
+                    <button class="preview-btn" onclick="openPreview('Family')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Student Pack (featured) -->
+            <div class="pricing-card featured student-pack">
+                <div class="badge">STUDENT PACK</div>
+                <div class="plan-header">
+                    <h2>Student Pack</h2>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">19</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <p class="plan-description">Special pricing for students — access all Wynox services</p>
+                <ul class="features">
+                    <li>✓ All Wynox services included</li>
+                    <li>✓ 500 GB Storage</li>
+                    <li>✓ Student Support</li>
+                    <li>✓ One account for all Wynox apps</li>
+                    <li>✓ Discounted rate</li>
+                </ul>
+                <div class="card-actions">
+                    <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Student Pack')">Get Student Pack</button>
+                    <button class="preview-btn" onclick="openPreview('Student Pack')">Preview</button>
+                </div>
             </div>
 
         </div>

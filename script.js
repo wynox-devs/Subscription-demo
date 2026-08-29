@@ -1,11 +1,10 @@
-// Subscription Plans Configuration
+// Subscription Plans Configuration (updated)
 const plans = {
     Free: { price: 0, storage: '5 GB', features: ['Basic Support', '1 Project'] },
     Basic: { price: 9, storage: '100 GB', features: ['Email Support', '10 Projects', 'Basic Analytics'] },
-    Advanced: { price: 29, storage: '500 GB', features: ['Priority Support', '50 Projects', 'Advanced Analytics', 'Team Collaboration'] },
     Pro: { price: 59, storage: '2 TB', features: ['24/7 Phone Support', 'Unlimited Projects', 'Advanced Analytics', 'Priority Support', 'Custom Domain'] },
-    Max: { price: 99, storage: '5 TB', features: ['Dedicated Support', 'Unlimited Projects', 'Enterprise Analytics', 'Custom Domain'] },
-    Ultra: { price: 199, storage: '10 TB', features: ['Dedicated Account Manager', 'Unlimited Projects', 'Custom Analytics', '24/7 Priority Support', 'Multiple Custom Domains'] }
+    Family: { price: 39, storage: '1 TB Shared', features: ['Family Accounts', 'Shared Storage', 'Shared Analytics'] },
+    'Student Pack': { price: 19, storage: '500 GB', features: ['All Wynox services included', 'Student Support', 'Single unified account'] }
 };
 
 // Get username input element
@@ -134,7 +133,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Allow Enter key to close modal
+// Allow Escape key to close modal
 document.addEventListener('keydown', function(event) {
     const modal = document.getElementById('successModal');
     if (event.key === 'Escape' && modal.classList.contains('show')) {
@@ -144,15 +143,53 @@ document.addEventListener('keydown', function(event) {
 
 // Focus username input on page load
 window.addEventListener('load', function() {
-    usernameInput.focus();
+    if (usernameInput) usernameInput.focus();
 });
 
 // Clear error on input
-usernameInput.addEventListener('input', function() {
-    if (this.value.length > 0) {
-        hideError();
+if (usernameInput) {
+    usernameInput.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            hideError();
+        }
+    });
+}
+
+// Small, efficient scroll listener to toggle header class (uses rAF)
+let lastKnownScrollY = 0;
+let ticking = false;
+
+function onScroll() {
+    lastKnownScrollY = window.scrollY;
+    requestTick();
+}
+
+function requestTick() {
+    if (!ticking) {
+        requestAnimationFrame(updateHeaderOnScroll);
     }
-});
+    ticking = true;
+}
+
+function updateHeaderOnScroll() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+    if (lastKnownScrollY > 30) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+    ticking = false;
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// Preview page navigation
+function openPreview(planName) {
+    // open preview.html with query param
+    const url = `preview.html?plan=${encodeURIComponent(planName)}`;
+    window.location.href = url;
+}
 
 // Example: Load and display existing subscriptions
 function displaySubscriptions() {
@@ -161,7 +198,7 @@ function displaySubscriptions() {
     return subscriptions;
 }
 
-// Export functions for testing
+// Export functions for testing (node)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         validateUsername,
