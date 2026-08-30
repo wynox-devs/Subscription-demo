@@ -632,3 +632,70 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* ----- Minimal visual adjustments to match provided image ----- */
+
+/* Pill-like cards and stronger white outline as in screenshot */
+.pricing-card {
+    border-radius: 36px;
+    padding: 48px 36px;
+    border: 2px solid rgba(255,255,255,0.12);
+}
+
+/* Inputs: rounded, pill-like */
+.username-input,
+.email-input {
+    border-radius: 28px;
+    padding: 14px 22px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.02);
+}
+
+/* Yellow 'Best' badge style (matches image) */
+.badge.yellow {
+    background: #ffc83d;
+    color: #111;
+    padding: 6px 18px;
+    top: -14px;
+    box-shadow: 0 8px 20px rgba(255,200,80,0.12);
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+/* Float-up entry animation */
+.pricing-card {
+    opacity: 0;
+    transform: translateY(26px) scale(.995);
+}
+
+.pricing-card.float-in {
+    animation: floatUp 640ms cubic-bezier(.22,.9,.32,1) forwards;
+}
+
+@keyframes floatUp {
+    from {
+        opacity: 0;
+        transform: translateY(26px) scale(.995);
+        filter: blur(.6px);
+    }
+    60% {
+        transform: translateY(-6px) scale(1.002);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* Stagger fallback delays so cards appear one after another */
+.pricing-grid .pricing-card:nth-child(1) { animation-delay: 0.06s; }
+.pricing-grid .pricing-card:nth-child(2) { animation-delay: 0.18s; }
+.pricing-grid .pricing-card:nth-child(3) { animation-delay: 0.30s; }
+.pricing-grid .pricing-card:nth-child(4) { animation-delay: 0.42s; }
+
+/* Slightly stronger hover lift to match image */
+.pricing-card:hover {
+    transform: translateY(-18px) scale(1.02);
+    box-shadow: 0 30px 80px rgba(255,107,107,0.14);
+}
