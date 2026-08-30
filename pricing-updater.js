@@ -179,20 +179,13 @@ function formatCurrency(amount, currencyCode) {
   const currency = CURRENCIES[currencyCode];
   if (!currency) return `${amount.toFixed(2)} USD`;
 
-  // Determine number of decimals (default 2)
   const decimals = currency.decimals !== undefined ? currency.decimals : 2;
-  
-  // Format number with fixed decimals
   let formattedAmount = amount.toFixed(decimals);
-  
-  // Split into integer and decimal parts
   let [integerPart, decimalPart] = formattedAmount.split('.');
-  
-  // Add thousands separator to integer part (default comma, but customisable)
+
   const thousandsSep = currency.thousandsSep || ',';
   integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
-  
-  // Recombine with decimal part if decimals > 0
+
   if (decimals > 0 && decimalPart) {
     const decimalSep = currency.decimalSep || '.';
     formattedAmount = integerPart + decimalSep + decimalPart;
@@ -200,9 +193,7 @@ function formatCurrency(amount, currencyCode) {
     formattedAmount = integerPart;
   }
 
-  // Determine symbol position (prefix or suffix)
   const symbolPosition = getSymbolPosition(currencyCode);
-  
   if (symbolPosition === 'prefix') {
     return `${currency.symbol}${formattedAmount}`;
   } else {
@@ -220,13 +211,11 @@ function convertPrice(usdPrice, targetCurrency = currentCurrency) {
 // ==================== UI UPDATER ====================
 function updateAllPrices() {
   const priceElements = document.querySelectorAll('.price');
-  
   priceElements.forEach((priceElement) => {
     const planType = priceElement.getAttribute('data-plan');
     if (planType && BASE_PRICES[planType] !== undefined) {
       const usdPrice = BASE_PRICES[planType];
       const convertedPrice = convertPrice(usdPrice);
-      
       if (usdPrice === 0) {
         priceElement.innerHTML = `<span class="amount">${formatCurrency(0, currentCurrency)}</span>`;
       } else {
@@ -237,15 +226,14 @@ function updateAllPrices() {
       }
     }
   });
-  
-  // Update free buttons
+
   const freeButtons = document.querySelectorAll('.btn.filled');
   freeButtons.forEach(button => {
     if (button.textContent.trim() === 'Free' || button.textContent.trim() === '$0') {
       button.textContent = formatCurrency(0, currentCurrency);
     }
   });
-  
+
   updateCurrencySelectorUI();
 }
 
@@ -255,10 +243,8 @@ function initCurrencySelector() {
   const dropdown = document.getElementById('currency-dropdown');
   const currencyList = document.getElementById('currency-list');
   const searchInput = document.getElementById('currency-search');
-  
   if (!triggerButton || !dropdown || !currencyList) return;
 
-  // Populate currency list
   currencyList.innerHTML = '';
   Object.entries(CURRENCIES).forEach(([code, currency]) => {
     const option = document.createElement('button');
@@ -278,20 +264,17 @@ function initCurrencySelector() {
     currencyList.appendChild(option);
   });
 
-  // Toggle dropdown on trigger click
   triggerButton.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleDropdown();
   });
 
-  // Close dropdown when clicking outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.currency-selector-container')) {
       closeDropdown();
     }
   });
 
-  // Search functionality
   if (searchInput) {
     searchInput.addEventListener('input', filterCurrencies);
     searchInput.addEventListener('click', (e) => e.stopPropagation());
