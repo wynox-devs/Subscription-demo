@@ -1,231 +1,107 @@
-<!DOCTYPE html>
+make html like this html ks <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Wynox Subscription</title>
-
+  <title>Wynox Subscrition</title>
   <link rel="icon" href="Logo.png" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
   <link
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap"
     rel="stylesheet"
   />
-
   <link rel="stylesheet" href="styles.css" />
-
   <noscript>
     <style>
-      .reveal {
-        opacity: 1 !important;
-        transform: none !important;
-      }
+      .reveal { opacity: 1 !important; transform: none !important; }
     </style>
   </noscript>
 </head>
-
 <body>
-
   <div class="glow" aria-hidden="true"></div>
 
   <header class="hero reveal">
-
-    <img
-      class="logo"
-      src="Logo.png"
-      alt="Wynox"
-    />
-
-    <!-- IP LOCATION -->
-    <p id="user-location" class="user-location">
-      Detecting location...
-    </p>
+    <img class="logo" src="Logo.png" alt="Wynox" />
 
     <form class="signup" onsubmit="return false;">
-
       <label class="field">
         <span class="prefix" aria-hidden="true">@</span>
-
-        <input
-          type="text"
-          name="username"
-          placeholder="username"
-          autocomplete="username"
-          aria-label="Username"
-        />
+        <input type="text" name="username" placeholder="username" autocomplete="username" aria-label="Username" />
       </label>
-
       <label class="field">
-
-        <input
-          type="email"
-          name="email"
-          placeholder="example@email.com"
-          autocomplete="email"
-          aria-label="Email"
-        />
-
+        <input type="email" name="email" placeholder="example@email.com" autocomplete="email" aria-label="Email" />
       </label>
-
     </form>
-
   </header>
 
-
   <main class="plans">
-
-    <!-- FREE -->
     <article class="card reveal">
-
       <h2>Free</h2>
-
       <div class="spacer"></div>
-
       <div class="actions">
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          details
-        </button>
-
-        <button
-          type="button"
-          class="btn filled"
-        >
-          Free
-        </button>
-
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn filled">Free</button>
       </div>
-
     </article>
 
-
-    <!-- STUDENT -->
     <article class="card reveal">
-
       <h2>Student</h2>
-
       <div class="spacer"></div>
-
-      <p class="price">
-        <span class="amount">$1/</span>
-        <span class="period">month</span>
-      </p>
-
+      <p class="price"><span class="amount">$1/</span><span class="period">month</span></p>
       <div class="actions">
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          details
-        </button>
-
-        <button
-          type="button"
-          class="btn filled"
-        >
-          Subscribe
-        </button>
-
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn filled">Subscribe</button>
       </div>
-
     </article>
 
-
-    <!-- PRO -->
     <article class="card featured reveal">
-
       <span class="badge">Best</span>
-
       <h2>Pro</h2>
-
       <div class="spacer"></div>
-
-      <p class="price">
-        <span class="amount">$19/</span>
-        <span class="period">month</span>
-      </p>
-
+      <p class="price"><span class="amount">$19/</span><span class="period">month</span></p>
       <div class="actions">
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          details
-        </button>
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          Try for free(7 days)
-        </button>
-
-        <button
-          type="button"
-          class="btn filled"
-        >
-          Subscribe
-        </button>
-
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn outline">Try for free(7 days)</button>
+        <button type="button" class="btn filled">Subscribe</button>
       </div>
-
     </article>
 
-
-    <!-- FAMILY -->
     <article class="card reveal">
-
       <h2>Family</h2>
-
       <div class="spacer"></div>
-
-      <p class="price">
-        <span class="amount">$25/</span>
-        <span class="period">month</span>
-      </p>
-
+      <p class="price"><span class="amount">$25/</span><span class="period">month</span></p>
       <div class="actions">
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          details
-        </button>
-
-        <button
-          type="button"
-          class="btn outline"
-        >
-          Try for free(3 days)
-        </button>
-
-        <button
-          type="button"
-          class="btn filled"
-        >
-          Subscribe
-        </button>
-
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn outline">Try for free(3 days)</button>
+        <button type="button" class="btn filled">Subscribe</button>
       </div>
-
     </article>
-
   </main>
 
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
 
-  <!-- EXTERNAL JAVASCRIPT -->
-  <script src="location.js"></script>
-  <script src="script.js"></script>
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
 
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+      );
+
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </body>
 </html>
