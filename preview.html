@@ -8,16 +8,28 @@
     <style>
         :root { color-scheme: dark; }
         html,body { height:100%; }
-        body { margin:0; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#000; color:#fff; display:flex; align-items:center; justify-content:center; }
-        .preview-shell { width:100%; max-width:900px; padding:40px; box-sizing:border-box; text-align:center; }
-        .logo-wrap { background:#0a0a0a; padding:28px; border-radius:12px; display:inline-block; }
-        .logo-large { height:140px; width:auto; display:block; margin:0 auto 18px; }
-        h1 { font-size:1.8rem; margin-bottom:8px; }
-        p.lead { color: #cbd5e1; margin-bottom:18px; }
-        .details { background: rgba(255,255,255,0.03); padding:18px; border-radius:10px; text-align:left; color:#e6eef8; }
-        .details h3 { margin-top:0; }
-        .back { display:inline-block; margin-top:20px; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,0.06); color:#fff; text-decoration:none; }
-        @media (max-width:480px){ .logo-large{height:100px;} .preview-shell{padding:20px;} }
+        body { margin:0; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: linear-gradient(135deg, #000 0%, #0a0a0a 100%); color:#fff; display:flex; align-items:center; justify-content:center; }
+        .preview-shell { width:100%; max-width:900px; padding:50px 40px; box-sizing:border-box; text-align:center; animation: slideUpFade 0.6s ease-out; }
+        .logo-wrap { background: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(10, 10, 10, 0.8) 100%); padding:40px; border-radius:20px; display:inline-block; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .logo-large { height:160px; width:auto; display:block; margin:0 auto 20px; filter: drop-shadow(0 10px 30px rgba(255, 255, 255, 0.1)); transition: transform 0.3s ease; }
+        .logo-wrap:hover .logo-large { transform: scale(1.05); }
+        h1 { font-size:2.2rem; margin-bottom:12px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #aaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        p.lead { color: #cbd5e1; margin-bottom:20px; font-size: 1.1rem; font-weight: 300; }
+        .details { background: linear-gradient(135deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.6) 100%); padding:30px; border-radius:15px; text-align:left; color:#e6eef8; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .details h3 { margin-top:0; margin-bottom: 15px; font-weight: 700; font-size: 1.1rem; }
+        .details ul { list-style: none; padding: 0; }
+        .details li { padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-weight: 500; }
+        .details li:last-child { border-bottom: none; }
+        .details li::before { content: '✓ '; color: #ff6b6b; font-weight: 700; margin-right: 8px; }
+        .back { display:inline-block; margin-top:30px; padding:12px 28px; border-radius:999px; background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%); color:#fff; text-decoration:none; font-weight: 700; letter-spacing: 0.8px; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(255, 107, 107, 0.25); }
+        .back:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 107, 107, 0.35); }
+        .preview-note { font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); margin-top: 15px; font-style: italic; }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width:768px) { .logo-large { height:120px; } .preview-shell { padding:30px 20px; } h1 { font-size:1.8rem; } }
+        @media (max-width:480px) { .logo-large{height:100px;} .preview-shell{padding:20px 15px;} h1 { font-size: 1.3rem; } .details { padding: 20px; } }
     </style>
 </head>
 <body>
@@ -30,8 +42,8 @@
 
         <div class="details" id="planDetails">
             <h3>About this pack</h3>
-            <p>This pack grants access to all Wynox services under a single account. Use the preview to confirm what is included for each plan.</p>
             <ul id="featuresList"></ul>
+            <p class="preview-note">This is a preview of the plan features. Only available to view plan details.</p>
         </div>
 
         <a class="back" href="index.html">← Back to plans</a>
@@ -43,24 +55,23 @@
             const params = new URLSearchParams(window.location.search);
             return params.get(name);
         }
-        const plan = qs('plan') || 'Student Pack';
+        const plan = qs('plan') || 'Student';
 
         const plans = {
             'Free': { price: 0, features: ['5 GB Storage','Basic Support','1 Project'] },
-            'Basic': { price: 9, features: ['100 GB Storage','Email Support','10 Projects','Basic Analytics'] },
-            'Pro': { price: 59, features: ['2 TB Storage','24/7 Phone Support','Unlimited Projects','Advanced Analytics'] },
-            'Family': { price: 39, features: ['1 TB Shared Storage','Family Accounts','Shared Analytics'] },
-            'Student Pack': { price: 19, features: ['All Wynox services included','500 GB Storage','Student Support'] }
+            'Student': { price: 19, features: ['500 GB Storage','Email Support','10 Projects','Basic Analytics'] },
+            'Family': { price: 39, features: ['1 TB Shared Storage','Priority Email Support','25 Projects','Advanced Analytics','Team Collaboration'] },
+            'Pro': { price: 59, features: ['2 TB Storage','24/7 Phone Support','Unlimited Projects','Advanced Analytics','Priority Support','Custom Domain'] }
         };
 
-        const data = plans[plan] || plans['Student Pack'];
+        const data = plans[plan] || plans['Student'];
         document.getElementById('planTitle').textContent = plan;
         document.getElementById('planSubtitle').textContent = `Price: $${data.price}/month`;
 
         const list = document.getElementById('featuresList');
         data.features.forEach(f => {
             const li = document.createElement('li');
-            li.textContent = '• ' + f;
+            li.textContent = f;
             list.appendChild(li);
         });
     </script>
