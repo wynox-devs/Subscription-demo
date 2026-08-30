@@ -1,0 +1,5 @@
+# Ignore runtime artifacts
+node_modules/
+ips.db
+ips.log
+.env
