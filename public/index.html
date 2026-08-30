@@ -3,11 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Subscription-demo (with IP collector)</title>
+  <title>Subscription-demo</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    h1 {
+      font-size: 36px;
+      margin-bottom: 16px;
+      color: #2c3e50;
+      text-align: center;
+    }
+    
+    .intro-text {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+    
+    #user-location {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #4a90e2;
+      margin-bottom: 20px;
+      min-height: 28px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Subscription-demo</h1>
-  <p>This example page includes the IP collector script.</p>
+  <main>
+    <h1>Subscription Demo</h1>
+    <p class="intro-text">Choose your region to see pricing in your local currency</p>
+    <div id="user-location"></div>
+  </main>
+  
+  <script src="/location.js"></script>
   <script src="/collect.js"></script>
 </body>
 </html>
