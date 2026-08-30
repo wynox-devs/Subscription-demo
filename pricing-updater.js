@@ -169,7 +169,6 @@ const BASE_PRICES = {
 
 // ==================== STATE MANAGEMENT ====================
 let currentCurrency = localStorage.getItem('wynox_currency') || 'USD';
-let selectedPlan = null;
 
 // ==================== CURRENCY FORMATTER ====================
 function formatCurrency(amount, currencyCode) {
@@ -237,16 +236,22 @@ function updateAllPrices() {
 }
 
 // ==================== CURRENCY SELECTOR ====================
-function createCurrencySelector() {
+function initCurrencySelector() {
   const triggerButton = document.getElementById('currency-trigger');
   const dropdown = document.getElementById('currency-dropdown');
   const currencyList = document.getElementById('currency-list');
+  const searchInput = document.getElementById('currency-search');
   
-  if (!triggerButton || !dropdown || !currencyList) return;
+  if (!triggerButton || !dropdown || !currencyList) {
+    console.error('Currency selector elements not found');
+    return;
+  }
   
   // Populate currency list
+  currencyList.innerHTML = '';
   Object.entries(CURRENCIES).forEach(([code, currency]) => {
     const currencyOption = document.createElement('button');
+    currencyOption.type = 'button';
     currencyOption.className = 'currency-option';
     currencyOption.setAttribute('data-currency', code);
     currencyOption.innerHTML = `
@@ -259,32 +264,54 @@ function createCurrencySelector() {
       currencyOption.classList.add('active');
     }
     
-    currencyOption.addEventListener('click', () => {
+    currencyOption.addEventListener('click', function(e) {
+      e.stopPropagation();
       selectCurrency(code);
     });
     
     currencyList.appendChild(currencyOption);
   });
   
-  // Event listeners
-  triggerButton.addEventListener('click', toggleDropdown);
+  // Toggle dropdown
+  triggerButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleDropdown();
+  });
   
   // Close dropdown when clicking outside
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e) {
     if (!e.target.closest('.currency-selector-container')) {
       closeDropdown();
     }
   });
   
   // Search functionality
-  const searchInput = document.getElementById('currency-search');
   if (searchInput) {
     searchInput.addEventListener('input', filterCurrencies);
-    searchInput.addEventListener('keydown', handleSearchKeyboard);
+    searchInput.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
   }
   
   // Keyboard navigation
-  document.addEventListener('keydown', handleGlobalKeyboard);
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeDropdown();
+      triggerButton.focus();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigateCurrencyOptions(e.key);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const highlighted = document.querySelector('.currency-option.highlighted');
+      if (highlighted) {
+        selectCurrency(highlighted.getAttribute('data-currency'));
+      }
+    }
+  });
+  
+  // Initial UI update
+  updateCurrencySelectorUI();
 }
 
 function toggleDropdown() {
@@ -307,8 +334,6 @@ function toggleDropdown() {
       const searchInput = document.getElementById('currency-search');
       if (searchInput) {
         searchInput.focus();
-        searchInput.value = '';
-        filterCurrencies({ target: searchInput });
       }
     }, 100);
   }
@@ -341,35 +366,6 @@ function filterCurrencies(event) {
   });
 }
 
-function handleSearchKeyboard(event) {
-  if (event.key === 'Escape') {
-    closeDropdown();
-    event.preventDefault();
-  }
-  
-  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-    event.preventDefault();
-    navigateCurrencyOptions(event.key);
-  }
-  
-  if (event.key === 'Enter') {
-    const highlighted = document.querySelector('.currency-option.highlighted');
-    if (highlighted) {
-      const currencyCode = highlighted.getAttribute('data-currency');
-      selectCurrency(currencyCode);
-    }
-  }
-}
-
-function handleGlobalKeyboard(event) {
-  const dropdown = document.getElementById('currency-dropdown');
-  if (!dropdown || !dropdown.classList.contains('show')) return;
-  
-  if (event.key === 'Escape') {
-    closeDropdown();
-  }
-}
-
 function navigateCurrencyOptions(direction) {
   const options = Array.from(document.querySelectorAll('.currency-option'))
     .filter(option => option.style.display !== 'none');
@@ -385,4 +381,54 @@ function navigateCurrencyOptions(direction) {
     nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
   }
   
-  options.forEach(option => option.classList
+  options.forEach(option => option.classList.remove('highlighted'));
+  options[nextIndex].classList.add('highlighted');
+  options[nextIndex].scrollIntoView({ block: 'nearest' });
+}
+
+function selectCurrency(currencyCode) {
+  currentCurrency = currencyCode;
+  localStorage.setItem('wynox_currency', currencyCode);
+  
+  // Update prices
+  updateAllPrices();
+  
+  // Close dropdown
+  closeDropdown();
+  
+  // Dispatch event for other scripts
+  window.dispatchEvent(new CustomEvent('currencyChange', {
+    detail: { currency: currencyCode }
+  }));
+}
+
+function updateCurrencySelectorUI() {
+  const trigger = document.getElementById('currency-trigger');
+  const currency = CURRENCIES[currentCurrency];
+  
+  if (trigger && currency) {
+    const flagDisplay = document.getElementById('currency-flag-display');
+    const codeDisplay = document.getElementById('currency-code-display');
+    const symbolDisplay = document.getElementById('currency-symbol-display');
+    
+    if (flagDisplay) flagDisplay.textContent = currency.flag;
+    if (codeDisplay) codeDisplay.textContent = currentCurrency;
+    if (symbolDisplay) symbolDisplay.textContent = currency.symbol;
+  }
+  
+  // Update active state in dropdown
+  const options = document.querySelectorAll('.currency-option');
+  options.forEach(option => {
+    if (option.getAttribute('data-currency') === currentCurrency) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
+  });
+}
+
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+  initCurrencySelector();
+  updateAllPrices();
+});
