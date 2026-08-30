@@ -12,8 +12,8 @@
     <header class="site-header">
         <div class="header-inner container">
             <div class="brand">
-                <img src="Logo.png" alt="Logo" class="logo">
-                <span class="brand-title">subcrition</span>
+                <img src="Logo.png" alt="Wynox Logo" class="logo">
+                <span class="brand-title">Wynox</span>
             </div>
         </div>
     </header>
@@ -35,7 +35,7 @@
                             type="text" 
                             id="usernameInput" 
                             class="username-input" 
-                            placeholder="name000"
+                            placeholder="username"
                             maxlength="50"
                         >
                     </div>
@@ -73,67 +73,40 @@
                     <li>✓ Basic Support</li>
                     <li>✓ 1 Project</li>
                     <li>✗ Advanced Analytics</li>
-                    <li>✗ Priority Support</li>
-                    <li>✗ Custom Domain</li>
                 </ul>
-                <button class="preview-btn" onclick="showPreview('Free')">Preview Features</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Free')">Get Started</button>
+                <button class="preview-btn" onclick="showPreview('Free')">details</button>
+                <button class="subscribe-btn outline" onclick="handleSubscribe('Free')">Free</button>
             </div>
 
-            <!-- Basic Plan -->
+            <!-- Student Plan -->
             <div class="pricing-card">
                 <div class="plan-header">
-                    <h2>Basic</h2>
+                    <h2>Student</h2>
                     <div class="price">
                         <span class="currency">$</span>
-                        <span class="amount">9</span>
+                        <span class="amount">1</span>
                         <span class="period">/month</span>
                     </div>
                 </div>
-                <p class="plan-description">For individuals and teams</p>
+                <p class="plan-description">Special pricing for students</p>
                 <ul class="features">
-                    <li>✓ 100 GB Storage</li>
+                    <li>✓ 500 GB Storage</li>
                     <li>✓ Email Support</li>
                     <li>✓ 10 Projects</li>
                     <li>✓ Basic Analytics</li>
-                    <li>✗ Priority Support</li>
-                    <li>✗ Custom Domain</li>
                 </ul>
-                <button class="preview-btn" onclick="showPreview('Basic')">Preview Features</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Basic')">Subscribe Now</button>
+                <button class="preview-btn" onclick="showPreview('Student')">details</button>
+                <button class="subscribe-btn" onclick="handleSubscribe('Student')">Subscribe</button>
             </div>
 
-            <!-- Advanced Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Advanced</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">29</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">For growing businesses</p>
-                <ul class="features">
-                    <li>✓ 500 GB Storage</li>
-                    <li>✓ Priority Email Support</li>
-                    <li>✓ 50 Projects</li>
-                    <li>✓ Advanced Analytics</li>
-                    <li>✓ Team Collaboration</li>
-                    <li>✗ Custom Domain</li>
-                </ul>
-                <button class="preview-btn" onclick="showPreview('Advanced')">Preview Features</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Advanced')">Subscribe Now</button>
-            </div>
-
-            <!-- Pro Plan -->
+            <!-- Pro Plan (featured) -->
             <div class="pricing-card featured">
-                <div class="badge">POPULAR</div>
+                <div class="badge yellow">Best</div>
                 <div class="plan-header">
                     <h2>Pro</h2>
                     <div class="price">
                         <span class="currency">$</span>
-                        <span class="amount">59</span>
+                        <span class="amount">19</span>
                         <span class="period">/month</span>
                     </div>
                 </div>
@@ -143,34 +116,32 @@
                     <li>✓ 24/7 Phone Support</li>
                     <li>✓ Unlimited Projects</li>
                     <li>✓ Advanced Analytics</li>
-                    <li>✓ Priority Support</li>
-                    <li>✓ Custom Domain</li>
                 </ul>
-                <button class="preview-btn" onclick="showPreview('Pro')">Preview Features</button>
-                <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe Now</button>
+                <button class="preview-btn" onclick="showPreview('Pro')">details</button>
+                <button class="preview-btn" onclick="showPreview('Pro')">Try for free(7 days)</button>
+                <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe</button>
             </div>
 
-            <!-- Max Plan -->
+            <!-- Family Plan -->
             <div class="pricing-card">
                 <div class="plan-header">
-                    <h2>Max</h2>
+                    <h2>Family</h2>
                     <div class="price">
                         <span class="currency">$</span>
-                        <span class="amount">99</span>
+                        <span class="amount">25</span>
                         <span class="period">/month</span>
                     </div>
                 </div>
-                <p class="plan-description">For enterprises</p>
+                <p class="plan-description">Shared plan for families</p>
                 <ul class="features">
-                    <li>✓ 5 TB Storage</li>
-                    <li>✓ Dedicated Support</li>
-                    <li>✓ Unlimited Projects</li>
-                    <li>✓ Enterprise Analytics</li>
-                    <li>✓ Priority Support</li>
-                    <li>✓ Custom Domain</li>
+                    <li>✓ 1 TB Shared Storage</li>
+                    <li>✓ Priority Email Support</li>
+                    <li>✓ 25 Projects</li>
+                    <li>✓ Team Collaboration</li>
                 </ul>
-                <button class="preview-btn" onclick="showPreview('Max')">Preview Features</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Max')">Subscribe Now</button>
+                <button class="preview-btn" onclick="showPreview('Family')">details</button>
+                <button class="preview-btn" onclick="showPreview('Family')">Try for free(3 days)</button>
+                <button class="subscribe-btn" onclick="handleSubscribe('Family')">Subscribe</button>
             </div>
 
         </div>
