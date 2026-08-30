@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>404 — Page not found</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7c3aed;--muted:#9aa4b2}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(135deg,var(--bg),#071226 60%);
+      color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:32px
+    }
+    .card{
+      max-width:920px;width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:36px;box-shadow:0 8px 30px rgba(2,6,23,0.6);display:flex;gap:28px;align-items:center
+    }
+    .illustration{flex:0 0 220px;display:grid;place-items:center}
+    .num{font-size:96px;font-weight:700;letter-spacing:-6px;color:var(--accent);margin:0}
+    .info{flex:1}
+    h1{font-size:28px;margin:0 0 8px}
+    p{margin:0 0 18px;color:var(--muted);line-height:1.45}
+    .actions{display:flex;gap:12px}
+    a.button{display:inline-block;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600}
+    a.primary{background:var(--accent);color:white}
+    a.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#dce7f5}
+    .small{font-size:13px;color:var(--muted);margin-top:14px}
+    @media (max-width:720px){.card{flex-direction:column;text-align:center}.illustration{order:-1}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="illustration" aria-hidden="true">
+      <div style="text-align:center">
+        <div class="num">404</div>
+        <svg width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.9">
+          <rect x="2" y="2" width="136" height="36" rx="6" stroke="rgba(255,255,255,0.04)"/>
+          <circle cx="24" cy="20" r="5" fill="rgba(255,255,255,0.04)"/>
+          <rect x="40" y="12" width="86" height="16" rx="4" fill="rgba(255,255,255,0.02)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="info">
+      <h1>We can’t find that page</h1>
+      <p>Either the page was moved, deleted, or you followed a broken link. If you expected to see something here, check the link or go back to the site home.</p>
+      <div class="actions">
+        <a class="button primary" href="/">Go to homepage</a>
+        <a class="button ghost" href="https://github.com/wynox-devs/Subscription-demo">View repository</a>
+      </div>
+      <div class="small">Tip: If you’re hosting this on GitHub Pages, you can serve this file as <code>404.html</code> at the repository root so Pages shows it automatically.</div>
+    </div>
+  </main>
+</body>
+</html>
