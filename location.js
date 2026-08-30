@@ -45,183 +45,110 @@ const COUNTRY_PRICING = {
   ZA: { currency: "ZAR", symbol: "R", free: 0, student: 15, pro: 280, family: 360 }
 };
 
-// Timezone to country code mapping
-const TIMEZONE_TO_COUNTRY = {
-  "Europe/London": "GB",
-  "Europe/Paris": "FR",
-  "Europe/Berlin": "DE",
-  "Europe/Madrid": "ES",
-  "Europe/Rome": "IT",
-  "Europe/Amsterdam": "NL",
-  "Europe/Brussels": "BE",
-  "Europe/Zurich": "CH",
-  "Europe/Vienna": "AT",
-  "Europe/Warsaw": "PL",
-  "Europe/Stockholm": "SE",
-  "Europe/Oslo": "NO",
-  "Europe/Athens": "GR",
-  "Europe/Dublin": "IE",
-  "Europe/Prague": "CZ",
-  "Europe/Budapest": "HU",
-  "Europe/Lisbon": "PT",
-  "Europe/Copenhagen": "DK",
-  "Asia/Tokyo": "JP",
-  "Asia/Shanghai": "CN",
-  "Asia/Hong_Kong": "CN",
-  "Asia/Kolkata": "IN",
-  "Asia/Singapore": "SG",
-  "Asia/Seoul": "KR",
-  "Asia/Bangkok": "TH",
-  "Australia/Sydney": "AU",
-  "Pacific/Auckland": "NZ",
-  "America/Toronto": "CA",
-  "America/Mexico_City": "MX",
-  "America/Sao_Paulo": "BR",
-  "America/New_York": "US",
-  "America/Los_Angeles": "US",
-  "America/Chicago": "US",
-  "America/Denver": "US",
-  "America/Anchorage": "US",
-  "Pacific/Honolulu": "US",
-  "Asia/Dubai": "AE",
-  "Asia/Riyadh": "SA",
-  "Africa/Johannesburg": "ZA"
-};
+// Country list for dropdown menu
+const COUNTRY_LIST = [
+  { code: "US", name: "United States (USD)" },
+  // Europe
+  { code: "DE", name: "Germany (EUR)" },
+  { code: "FR", name: "France (EUR)" },
+  { code: "GB", name: "United Kingdom (GBP)" },
+  { code: "IT", name: "Italy (EUR)" },
+  { code: "ES", name: "Spain (EUR)" },
+  { code: "NL", name: "Netherlands (EUR)" },
+  { code: "BE", name: "Belgium (EUR)" },
+  { code: "CH", name: "Switzerland (CHF)" },
+  { code: "AT", name: "Austria (EUR)" },
+  { code: "PL", name: "Poland (PLN)" },
+  { code: "SE", name: "Sweden (SEK)" },
+  { code: "NO", name: "Norway (NOK)" },
+  // Asia-Pacific
+  { code: "JP", name: "Japan (JPY)" },
+  { code: "CN", name: "China (CNY)" },
+  { code: "IN", name: "India (INR)" },
+  { code: "AU", name: "Australia (AUD)" },
+  { code: "SG", name: "Singapore (SGD)" },
+  { code: "NZ", name: "New Zealand (NZD)" },
+  { code: "KR", name: "South Korea (KRW)" },
+  // Americas
+  { code: "CA", name: "Canada (CAD)" },
+  { code: "MX", name: "Mexico (MXN)" },
+  { code: "BR", name: "Brazil (BRL)" },
+  // Middle East & Africa
+  { code: "AE", name: "United Arab Emirates (AED)" },
+  { code: "SA", name: "Saudi Arabia (SAR)" },
+  { code: "ZA", name: "South Africa (ZAR)" }
+];
 
 // Global location object
 window.userLocation = {
   country: null,
   countryCode: null,
-  region: null,
   timezone: null,
-  displayText: "Detecting location...",
+  displayText: "Please select your region",
   pricing: null,
-  isLoading: true,
-  error: null
+  isLoading: false,
+  error: null,
+  manuallySelected: false
 };
 
 /**
- * Detect user region from system settings (no IP collection)
+ * Set user location from manual selection
  */
-function getSystemRegion() {
+function setUserLocation(countryCode) {
   try {
-    // Get timezone from system
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    
-    // Get language/region from browser locale
-    const locale = navigator.language || navigator.userLanguage || "en-US";
-    
-    // Extract country code from locale (e.g., "de-DE" -> "DE")
-    let countryCode = locale.split("-")[1]?.toUpperCase() || null;
-    
-    // Try timezone-based country detection if locale doesn't have country code
-    if (!countryCode && timezone) {
-      countryCode = TIMEZONE_TO_COUNTRY[timezone] || null;
-    }
-    
-    // Fallback to default if no country code found
-    if (!countryCode) {
+    if (!COUNTRY_PRICING[countryCode]) {
       countryCode = "US";
     }
-    
-    return {
-      countryCode: countryCode,
-      timezone: timezone,
-      locale: locale
-    };
-  } catch (error) {
-    console.error("✗ System region detection error:", error);
-    return {
-      countryCode: "US",
-      timezone: null,
-      locale: "en-US"
-    };
-  }
-}
 
-/**
- * Get country name from country code
- */
-function getCountryName(countryCode) {
-  try {
-    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-    return regionNames.of(countryCode) || null;
-  } catch (error) {
-    console.error("✗ Could not get country name:", error);
-    return null;
-  }
-}
-
-/**
- * Initialize user location from system settings
- */
-function initializeUserLocation() {
-  try {
-    const regionInfo = getSystemRegion();
-    const countryCode = regionInfo.countryCode;
-    const countryName = getCountryName(countryCode) || "Unknown";
-    
-    // Get pricing for this country
+    const countryData = COUNTRY_LIST.find(c => c.code === countryCode);
+    const countryName = countryData ? countryData.name.split(" (")[0] : "United States";
     const pricing = COUNTRY_PRICING[countryCode] || COUNTRY_PRICING.default;
-    
+
     // Update global location object
     window.userLocation = {
       country: countryName,
       countryCode: countryCode,
-      region: regionInfo.locale,
-      timezone: regionInfo.timezone,
-      displayText: formatLocationDisplay(countryName, regionInfo.timezone),
+      timezone: null,
+      displayText: `${countryName} (${pricing.symbol})`,
       pricing: pricing,
       isLoading: false,
-      error: null
+      error: null,
+      manuallySelected: true
     };
-    
+
+    // Save to localStorage
+    localStorage.setItem("selectedCountry", countryCode);
+
     // Update UI
     updateLocationDisplay();
-    
+    updateRegionSelector();
+
     // Dispatch event for pricing update
     document.dispatchEvent(
       new CustomEvent("locationReady", {
         detail: window.userLocation
       })
     );
-    
-    console.log("✓ Location detected from system:", window.userLocation);
-    
+
+    console.log("✓ Region selected:", window.userLocation);
+
   } catch (error) {
-    console.error("✗ Location detection error:", error);
-    
-    window.userLocation = {
-      countryCode: "US",
-      country: "United States",
-      region: null,
-      timezone: null,
-      displayText: "Location unavailable",
-      pricing: COUNTRY_PRICING.default,
-      isLoading: false,
-      error: error.message
-    };
-    
-    updateLocationDisplay();
-    
-    document.dispatchEvent(
-      new CustomEvent("locationError", {
-        detail: { error: error.message }
-      })
-    );
+    console.error("✗ Location selection error:", error);
+    window.userLocation.error = error.message;
   }
 }
 
 /**
- * Format location display text
+ * Initialize user location from localStorage or default
  */
-function formatLocationDisplay(country, timezone) {
-  if (country && timezone) {
-    return `${country} (${timezone})`;
-  } else if (country) {
-    return country;
+function initializeUserLocation() {
+  try {
+    let countryCode = localStorage.getItem("selectedCountry") || "US";
+    setUserLocation(countryCode);
+  } catch (error) {
+    console.error("✗ Location initialization error:", error);
+    setUserLocation("US");
   }
-  return "Location unavailable";
 }
 
 /**
@@ -231,6 +158,82 @@ function updateLocationDisplay() {
   const locationElement = document.getElementById("user-location");
   if (locationElement) {
     locationElement.textContent = window.userLocation.displayText;
+  }
+}
+
+/**
+ * Create and update region selector menu
+ */
+function createRegionSelector() {
+  let selectorContainer = document.getElementById("region-selector-container");
+  
+  if (!selectorContainer) {
+    selectorContainer = document.createElement("div");
+    selectorContainer.id = "region-selector-container";
+    selectorContainer.style.cssText = `
+      padding: 20px;
+      margin: 20px 0;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    `;
+    
+    const label = document.createElement("label");
+    label.htmlFor = "country-selector";
+    label.style.cssText = `
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #333;
+    `;
+    label.textContent = "Select Your Region:";
+    
+    const select = document.createElement("select");
+    select.id = "country-selector";
+    select.style.cssText = `
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    `;
+    
+    // Add options
+    COUNTRY_LIST.forEach(country => {
+      const option = document.createElement("option");
+      option.value = country.code;
+      option.textContent = country.name;
+      select.appendChild(option);
+    });
+    
+    // Add change event listener
+    select.addEventListener("change", (e) => {
+      setUserLocation(e.target.value);
+    });
+    
+    selectorContainer.appendChild(label);
+    selectorContainer.appendChild(select);
+    
+    // Find insertion point - after user-location element or at the beginning of body
+    const locationElement = document.getElementById("user-location");
+    if (locationElement) {
+      locationElement.parentNode.insertBefore(selectorContainer, locationElement.nextSibling);
+    } else {
+      document.body.insertBefore(selectorContainer, document.body.firstChild);
+    }
+  }
+  
+  updateRegionSelector();
+}
+
+/**
+ * Update region selector to reflect current selection
+ */
+function updateRegionSelector() {
+  const selector = document.getElementById("country-selector");
+  if (selector) {
+    selector.value = window.userLocation.countryCode || "US";
   }
 }
 
@@ -261,5 +264,19 @@ window.getCurrencyInfo = function() {
   return window.userLocation.pricing || COUNTRY_PRICING.default;
 };
 
-// Initialize location detection from system settings
+/**
+ * Get all countries for external use
+ */
+window.getCountryList = function() {
+  return COUNTRY_LIST;
+};
+
+// Initialize location from localStorage
 initializeUserLocation();
+
+// Create region selector when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", createRegionSelector);
+} else {
+  createRegionSelector();
+}
