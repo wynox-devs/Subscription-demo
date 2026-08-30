@@ -1,177 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscription Plans</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wynox</title>
+  <link rel="icon" href="Logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <noscript>
+    <style>
+      .reveal { opacity: 1 !important; transform: none !important; }
+    </style>
+  </noscript>
 </head>
 <body>
-    <!-- Fixed site header with logo (centered at top) -->
-    <header class="site-header">
-        <div class="header-inner container">
-            <div class="brand">
-                <img src="Logo.png" alt="Wynox Logo" class="logo">
-            </div>
-        </div>
-    </header>
+  <div class="glow" aria-hidden="true"></div>
 
-    <main class="container">
-        <!-- Hero / Header Section -->
-        <section class="hero">
-            <div class="header">
-                <h1>Choose Your Plan</h1>
-                <p>Select the perfect subscription plan for your needs</p>
-            </div>
+  <header class="hero reveal">
+    <img class="logo" src="Logo.png" alt="Wynox" />
 
-            <!-- Username & Email Input Section -->
-            <div class="username-section">
-                <div class="input-row">
-                    <div class="username-wrap">
-                        <span class="at-prefix">@</span>
-                        <input 
-                            type="text" 
-                            id="usernameInput" 
-                            class="username-input" 
-                            placeholder="username"
-                            maxlength="50"
-                        >
-                    </div>
-                    <span class="username-error" id="usernameError"></span>
-                </div>
+    <form class="signup" onsubmit="return false;">
+      <label class="field">
+        <span class="prefix" aria-hidden="true">@</span>
+        <input type="text" name="username" placeholder="username" autocomplete="username" aria-label="Username" />
+      </label>
+      <label class="field">
+        <input type="email" name="email" placeholder="example@email.com" autocomplete="email" aria-label="Email" />
+      </label>
+    </form>
+  </header>
 
-                <div class="input-row">
-                    <input
-                        type="email"
-                        id="emailInput"
-                        class="email-input"
-                        placeholder="example@email.com"
-                        maxlength="254"
-                    >
-                    <span class="email-error" id="emailError"></span>
-                </div>
-            </div>
-        </section>
+  <main class="plans">
+    <article class="card reveal">
+      <h2>Free</h2>
+      <div class="spacer"></div>
+      <div class="actions">
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn filled">Free</button>
+      </div>
+    </article>
 
-        <!-- Pricing Cards -->
-        <div class="pricing-grid">
-            <!-- Free Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Free</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">0</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">Perfect for getting started</p>
-                <ul class="features">
-                    <li>✓ 5 GB Storage</li>
-                    <li>✓ Basic Support</li>
-                    <li>✓ 1 Project</li>
-                    <li>✗ Advanced Analytics</li>
-                </ul>
-                <button class="preview-btn" onclick="showPreview('Free')">details</button>
-                <button class="subscribe-btn outline" onclick="handleSubscribe('Free')">Free</button>
-            </div>
+    <article class="card reveal">
+      <h2>Student</h2>
+      <div class="spacer"></div>
+      <p class="price"><span class="amount">$1/</span><span class="period">month</span></p>
+      <div class="actions">
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn filled">Subscribe</button>
+      </div>
+    </article>
 
-            <!-- Student Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Student</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">1</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">Special pricing for students</p>
-                <ul class="features">
-                    <li>✓ 500 GB Storage</li>
-                    <li>✓ Email Support</li>
-                    <li>✓ 10 Projects</li>
-                    <li>✓ Basic Analytics</li>
-                </ul>
-                <button class="preview-btn" onclick="showPreview('Student')">details</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Student')">Subscribe</button>
-            </div>
+    <article class="card featured reveal">
+      <span class="badge">Best</span>
+      <h2>Pro</h2>
+      <div class="spacer"></div>
+      <p class="price"><span class="amount">$19/</span><span class="period">month</span></p>
+      <div class="actions">
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn outline">Try for free(7 days)</button>
+        <button type="button" class="btn filled">Subscribe</button>
+      </div>
+    </article>
 
-            <!-- Pro Plan (featured) -->
-            <div class="pricing-card featured">
-                <div class="badge yellow">Best</div>
-                <div class="plan-header">
-                    <h2>Pro</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">19</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">For professionals</p>
-                <ul class="features">
-                    <li>✓ 2 TB Storage</li>
-                    <li>✓ 24/7 Phone Support</li>
-                    <li>✓ Unlimited Projects</li>
-                    <li>✓ Advanced Analytics</li>
-                </ul>
-                <button class="preview-btn" onclick="showPreview('Pro')">details</button>
-                <button class="preview-btn" onclick="showPreview('Pro')">Try for free(7 days)</button>
-                <button class="subscribe-btn featured-btn" onclick="handleSubscribe('Pro')">Subscribe</button>
-            </div>
+    <article class="card reveal">
+      <h2>Family</h2>
+      <div class="spacer"></div>
+      <p class="price"><span class="amount">$25/</span><span class="period">month</span></p>
+      <div class="actions">
+        <button type="button" class="btn outline">details</button>
+        <button type="button" class="btn outline">Try for free(3 days)</button>
+        <button type="button" class="btn filled">Subscribe</button>
+      </div>
+    </article>
+  </main>
 
-            <!-- Family Plan -->
-            <div class="pricing-card">
-                <div class="plan-header">
-                    <h2>Family</h2>
-                    <div class="price">
-                        <span class="currency">$</span>
-                        <span class="amount">25</span>
-                        <span class="period">/month</span>
-                    </div>
-                </div>
-                <p class="plan-description">Shared plan for families</p>
-                <ul class="features">
-                    <li>✓ 1 TB Shared Storage</li>
-                    <li>✓ Priority Email Support</li>
-                    <li>✓ 25 Projects</li>
-                    <li>✓ Team Collaboration</li>
-                </ul>
-                <button class="preview-btn" onclick="showPreview('Family')">details</button>
-                <button class="preview-btn" onclick="showPreview('Family')">Try for free(3 days)</button>
-                <button class="subscribe-btn" onclick="handleSubscribe('Family')">Subscribe</button>
-            </div>
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
 
-        </div>
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
 
-        <!-- Success Modal -->
-        <div id="successModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <div class="modal-body">
-                    <div class="success-icon">✓</div>
-                    <h2>Subscription Confirmed!</h2>
-                    <p id="confirmationMessage"></p>
-                    <button class="modal-btn" onclick="closeModal()">Close</button>
-                </div>
-            </div>
-        </div>
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+      );
 
-        <!-- Preview Modal -->
-        <div id="previewModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="previewClose">&times;</span>
-                <div class="modal-body">
-                    <h2 id="previewTitle">Features Preview</h2>
-                    <ul id="previewList" class="features"></ul>
-                    <button class="modal-btn" onclick="closePreview()">Close</button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <script src="script.js"></script>
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </body>
 </html>
