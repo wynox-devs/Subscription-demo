@@ -1,12 +1,2 @@
-(async function(){
-  try {
-    await fetch('/collect-ip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: location.href }),
-      credentials: 'same-origin'
-    });
-  } catch (e) {
-    console.error('IP collect failed', e);
-  }
-})();
+// IP collection removed - users select region manually
+console.log("IP collection disabled. Users must select region from menu.");
