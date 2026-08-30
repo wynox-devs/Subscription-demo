@@ -105,7 +105,6 @@ const CURRENCIES = {
   MOP: { symbol: 'MOP$', name: 'Macanese Pataca', flag: '🇲🇴', rate: 8.05, decimals: 2 },
   BND: { symbol: 'B$', name: 'Brunei Dollar', flag: '🇧🇳', rate: 1.34, decimals: 2 },
   KPW: { symbol: '₩', name: 'North Korean Won', flag: '🇰🇵', rate: 900, decimals: 0 },
-  MMK: { symbol: 'K', name: 'Myanmar Kyat', flag: '🇲🇲', rate: 2100, decimals: 0 },
   IRR: { symbol: '﷼', name: 'Iranian Rial', flag: '🇮🇷', rate: 42000, decimals: 0 },
   IQD: { symbol: 'د.ع', name: 'Iraqi Dinar', flag: '🇮🇶', rate: 1310, decimals: 0 },
   SYP: { symbol: '£S', name: 'Syrian Pound', flag: '🇸🇾', rate: 13000, decimals: 0 },
@@ -170,7 +169,6 @@ const BASE_PRICES = {
 
 // ==================== STATE MANAGEMENT ====================
 let currentCurrency = localStorage.getItem('wynox_currency') || 'USD';
-let exchangeRates = { ...CURRENCIES };
 let selectedPlan = null;
 
 // ==================== CURRENCY FORMATTER ====================
@@ -188,7 +186,7 @@ function formatCurrency(amount, currencyCode) {
   } else if (symbolPosition === 'suffix') {
     return `${formattedAmount} ${currency.symbol}`;
   } else {
-    return `${formattedAmount} ${currency.code || currencyCode}`;
+    return `${formattedAmount} ${currencyCode}`;
   }
 }
 
@@ -208,10 +206,9 @@ function convertPrice(usdPrice, targetCurrency = currentCurrency) {
 // ==================== UI UPDATER ====================
 function updateAllPrices() {
   const priceElements = document.querySelectorAll('.price');
-  const freeButtons = document.querySelectorAll('.btn.filled');
   
-  priceElements.forEach((priceElement, index) => {
-    const planType = getPlanTypeFromIndex(index);
+  priceElements.forEach((priceElement) => {
+    const planType = priceElement.getAttribute('data-plan');
     if (planType && BASE_PRICES[planType] !== undefined) {
       const usdPrice = BASE_PRICES[planType];
       const convertedPrice = convertPrice(usdPrice);
@@ -228,6 +225,7 @@ function updateAllPrices() {
   });
   
   // Update free buttons
+  const freeButtons = document.querySelectorAll('.btn.filled');
   freeButtons.forEach(button => {
     if (button.textContent.trim() === 'Free' || button.textContent.trim() === '$0') {
       button.textContent = formatCurrency(0, currentCurrency);
@@ -238,55 +236,13 @@ function updateAllPrices() {
   updateCurrencySelectorUI();
 }
 
-function getPlanTypeFromIndex(index) {
-  const planOrder = ['free', 'student', 'pro', 'family'];
-  return planOrder[index];
-}
-
 // ==================== CURRENCY SELECTOR ====================
 function createCurrencySelector() {
-  // Create selector container
-  const selectorContainer = document.createElement('div');
-  selectorContainer.className = 'currency-selector-container';
-  selectorContainer.id = 'currency-selector-container';
+  const triggerButton = document.getElementById('currency-trigger');
+  const dropdown = document.getElementById('currency-dropdown');
+  const currencyList = document.getElementById('currency-list');
   
-  // Create trigger button
-  const triggerButton = document.createElement('button');
-  triggerButton.className = 'currency-trigger';
-  triggerButton.id = 'currency-trigger';
-  triggerButton.setAttribute('aria-label', 'Select currency');
-  triggerButton.innerHTML = `
-    <span class="currency-flag">${CURRENCIES[currentCurrency].flag}</span>
-    <span class="currency-code">${currentCurrency}</span>
-    <span class="currency-symbol">${CURRENCIES[currentCurrency].symbol}</span>
-    <svg class="currency-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-  `;
-  
-  // Create dropdown
-  const dropdown = document.createElement('div');
-  dropdown.className = 'currency-dropdown';
-  dropdown.id = 'currency-dropdown';
-  dropdown.style.display = 'none';
-  
-  // Add search input
-  const searchContainer = document.createElement('div');
-  searchContainer.className = 'currency-search-container';
-  searchContainer.innerHTML = `
-    <input type="text" class="currency-search" id="currency-search" placeholder="Search currency...">
-    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-  `;
-  
-  dropdown.appendChild(searchContainer);
-  
-  // Add currency list
-  const currencyList = document.createElement('div');
-  currencyList.className = 'currency-list';
-  currencyList.id = 'currency-list';
+  if (!triggerButton || !dropdown || !currencyList) return;
   
   // Populate currency list
   Object.entries(CURRENCIES).forEach(([code, currency]) => {
@@ -310,24 +266,12 @@ function createCurrencySelector() {
     currencyList.appendChild(currencyOption);
   });
   
-  dropdown.appendChild(currencyList);
-  
-  // Assemble selector
-  selectorContainer.appendChild(triggerButton);
-  selectorContainer.appendChild(dropdown);
-  
-  // Add to DOM
-  const heroSection = document.querySelector('.hero');
-  if (heroSection) {
-    heroSection.insertBefore(selectorContainer, heroSection.querySelector('.signup'));
-  }
-  
   // Event listeners
   triggerButton.addEventListener('click', toggleDropdown);
   
   // Close dropdown when clicking outside
   document.addEventListener('click', (e) => {
-    if (!selectorContainer.contains(e.target)) {
+    if (!e.target.closest('.currency-selector-container')) {
       closeDropdown();
     }
   });
@@ -336,26 +280,37 @@ function createCurrencySelector() {
   const searchInput = document.getElementById('currency-search');
   if (searchInput) {
     searchInput.addEventListener('input', filterCurrencies);
+    searchInput.addEventListener('keydown', handleSearchKeyboard);
   }
   
   // Keyboard navigation
-  selectorContainer.addEventListener('keydown', handleKeyboardNavigation);
+  document.addEventListener('keydown', handleGlobalKeyboard);
 }
 
 function toggleDropdown() {
   const dropdown = document.getElementById('currency-dropdown');
   const trigger = document.getElementById('currency-trigger');
   
-  if (dropdown.style.display === 'none') {
-    dropdown.style.display = 'block';
+  if (!dropdown || !trigger) return;
+  
+  const isOpen = dropdown.classList.contains('show');
+  
+  if (isOpen) {
+    closeDropdown();
+  } else {
+    dropdown.classList.add('show');
     trigger.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+    
     // Focus search input
     setTimeout(() => {
       const searchInput = document.getElementById('currency-search');
-      if (searchInput) searchInput.focus();
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.value = '';
+        filterCurrencies({ target: searchInput });
+      }
     }, 100);
-  } else {
-    closeDropdown();
   }
 }
 
@@ -363,8 +318,11 @@ function closeDropdown() {
   const dropdown = document.getElementById('currency-dropdown');
   const trigger = document.getElementById('currency-trigger');
   
-  if (dropdown) dropdown.style.display = 'none';
-  if (trigger) trigger.classList.remove('open');
+  if (dropdown) dropdown.classList.remove('show');
+  if (trigger) {
+    trigger.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
 }
 
 function filterCurrencies(event) {
@@ -383,30 +341,15 @@ function filterCurrencies(event) {
   });
 }
 
-function handleKeyboardNavigation(event) {
+function handleSearchKeyboard(event) {
   if (event.key === 'Escape') {
     closeDropdown();
+    event.preventDefault();
   }
   
   if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
     event.preventDefault();
-    const options = Array.from(document.querySelectorAll('.currency-option'))
-      .filter(option => option.style.display !== 'none');
-    
-    if (options.length === 0) return;
-    
-    const currentIndex = options.findIndex(option => option.classList.contains('highlighted'));
-    let nextIndex;
-    
-    if (event.key === 'ArrowDown') {
-      nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0;
-    } else {
-      nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
-    }
-    
-    options.forEach(option => option.classList.remove('highlighted'));
-    options[nextIndex].classList.add('highlighted');
-    options[nextIndex].scrollIntoView({ block: 'nearest' });
+    navigateCurrencyOptions(event.key);
   }
   
   if (event.key === 'Enter') {
@@ -418,60 +361,28 @@ function handleKeyboardNavigation(event) {
   }
 }
 
-function selectCurrency(currencyCode) {
-  currentCurrency = currencyCode;
-  localStorage.setItem('wynox_currency', currencyCode);
+function handleGlobalKeyboard(event) {
+  const dropdown = document.getElementById('currency-dropdown');
+  if (!dropdown || !dropdown.classList.contains('show')) return;
   
-  // Update prices
-  updateAllPrices();
-  
-  // Update selector UI
-  updateCurrencySelectorUI();
-  
-  // Close dropdown
-  closeDropdown();
-  
-  // Dispatch event for other scripts
-  window.dispatchEvent(new CustomEvent('currencyChange', {
-    detail: { currency: currencyCode }
-  }));
+  if (event.key === 'Escape') {
+    closeDropdown();
+  }
 }
 
-function updateCurrencySelectorUI() {
-  const trigger = document.getElementById('currency-trigger');
-  if (trigger) {
-    const currency = CURRENCIES[currentCurrency];
-    trigger.innerHTML = `
-      <span class="currency-flag">${currency.flag}</span>
-      <span class="currency-code">${currentCurrency}</span>
-      <span class="currency-symbol">${currency.symbol}</span>
-      <svg class="currency-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    `;
+function navigateCurrencyOptions(direction) {
+  const options = Array.from(document.querySelectorAll('.currency-option'))
+    .filter(option => option.style.display !== 'none');
+  
+  if (options.length === 0) return;
+  
+  const currentIndex = options.findIndex(option => option.classList.contains('highlighted'));
+  let nextIndex;
+  
+  if (direction === 'ArrowDown') {
+    nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0;
+  } else {
+    nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
   }
   
-  // Update active state in dropdown
-  const options = document.querySelectorAll('.currency-option');
-  options.forEach(option => {
-    if (option.getAttribute('data-currency') === currentCurrency) {
-      option.classList.add('active');
-    } else {
-      option.classList.remove('active');
-    }
-  });
-}
-
-// ==================== INITIALIZATION ====================
-document.addEventListener('DOMContentLoaded', () => {
-  createCurrencySelector();
-  updateAllPrices();
-  
-  // Listen for currency changes from other scripts
-  window.addEventListener('currencyChange', (e) => {
-    if (e.detail && e.detail.currency) {
-      currentCurrency = e.detail.currency;
-      updateAllPrices();
-    }
-  });
-});
+  options.forEach(option => option.classList
