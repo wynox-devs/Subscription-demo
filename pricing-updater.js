@@ -28,7 +28,7 @@ const CURRENCIES = {
   IDR: { symbol: 'Rp', name: 'Indonesian Rupiah', flag: '🇮🇩', rate: 15750, decimals: 0 },
   MYR: { symbol: 'RM', name: 'Malaysian Ringgit', flag: '🇲🇾', rate: 4.73, decimals: 2 },
   PHP: { symbol: '₱', name: 'Philippine Peso', flag: '🇵🇭', rate: 56.2, decimals: 2 },
-  VND: { symbol: '₫', name: 'Vietnamese Dong', flag: '🇻🇳', rate: 24750, decimals: 0 },
+  VND: { symbol: '₫', name: 'Vietnamese Dong', flag: '🇻🇳', rate: 24750, decimals: 0, thousandsSep: '.', decimalSep: ',' },
   EGP: { symbol: 'E£', name: 'Egyptian Pound', flag: '🇪🇬', rate: 47.9, decimals: 2 },
   NGN: { symbol: '₦', name: 'Nigerian Naira', flag: '🇳🇬', rate: 1600, decimals: 2 },
   KES: { symbol: 'KSh', name: 'Kenyan Shilling', flag: '🇰🇪', rate: 131.5, decimals: 2 },
@@ -170,16 +170,40 @@ const BASE_PRICES = {
 let currentCurrency = localStorage.getItem('wynox_currency') || 'USD';
 
 // ==================== CURRENCY FORMATTER ====================
+function getSymbolPosition(currencyCode) {
+  const prefixCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CNY', 'KRW', 'INR', 'RUB', 'BRL', 'AUD', 'CAD', 'CHF', 'SGD', 'HKD', 'NZD', 'MXN', 'TRY', 'ZAR', 'AED', 'SAR', 'THB', 'IDR', 'MYR', 'PHP', 'VND', 'EGP', 'NGN', 'KES', 'PKR', 'BDT', 'UAH', 'ILS', 'CLP', 'COP', 'ARS', 'PEN', 'RON', 'CZK', 'HUF', 'ISK', 'QAR', 'KWD', 'BHD', 'OMR', 'JOD', 'LBP', 'MAD', 'TND', 'DZD', 'ETB', 'GHS', 'TZS', 'UGX', 'XAF', 'XOF', 'RSD', 'HRK', 'BGN', 'LKR', 'NPR', 'MMK', 'KHR', 'LAK', 'MNT', 'KZT', 'UZS', 'AZN', 'GEL', 'AMD', 'BYN', 'MDL', 'BAM', 'MKD', 'ALL', 'BOB', 'PYG', 'UYU', 'VES', 'CRC', 'DOP', 'GTQ', 'HNL', 'NIO', 'PAB', 'JMD', 'TTD', 'BBD', 'BSD', 'BZD', 'GYD', 'SRD', 'FJD', 'PGK', 'SBD', 'TOP', 'WST', 'VUV', 'MOP', 'BND', 'KPW', 'IRR', 'IQD', 'SYP', 'YER', 'AFN', 'MVR', 'BTN', 'MUR', 'SCR', 'MGA', 'MZN', 'ZMW', 'MWK', 'BWP', 'NAD', 'LSL', 'SZL', 'AOA', 'BIF', 'CDF', 'DJF', 'ERN', 'GMD', 'GNF', 'LRD', 'SDG', 'SOS', 'SSP', 'STN', 'SLL', 'CVE', 'KMF', 'SHP', 'GIP', 'FKP', 'IMP', 'JEP', 'GGP', 'ANG', 'AWG', 'BMD', 'KYD', 'XCD', 'TMT', 'KGS', 'TJS', 'LYD', 'MRU', 'RWF', 'HTG', 'CUP', 'CUC'];
+  return prefixCurrencies.includes(currencyCode) ? 'prefix' : 'suffix';
+}
+
 function formatCurrency(amount, currencyCode) {
   const currency = CURRENCIES[currencyCode];
   if (!currency) return `${amount.toFixed(2)} USD`;
+
+  // Determine number of decimals (default 2)
+  const decimals = currency.decimals !== undefined ? currency.decimals : 2;
   
-  const formattedAmount = amount.toFixed(currency.decimals);
+  // Format number with fixed decimals
+  let formattedAmount = amount.toFixed(decimals);
   
-  // Determine symbol position
-  const prefixCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CNY', 'KRW', 'INR', 'RUB', 'BRL', 'AUD', 'CAD', 'CHF', 'SGD', 'HKD', 'NZD', 'MXN', 'TRY', 'ZAR', 'AED', 'SAR', 'THB', 'IDR', 'MYR', 'PHP', 'VND', 'EGP', 'NGN', 'KES', 'PKR', 'BDT', 'UAH', 'ILS', 'CLP', 'COP', 'ARS', 'PEN', 'RON', 'CZK', 'HUF', 'ISK', 'QAR', 'KWD', 'BHD', 'OMR', 'JOD', 'LBP', 'MAD', 'TND', 'DZD', 'ETB', 'GHS', 'TZS', 'UGX', 'XAF', 'XOF', 'RSD', 'HRK', 'BGN', 'LKR', 'NPR', 'MMK', 'KHR', 'LAK', 'MNT', 'KZT', 'UZS', 'AZN', 'GEL', 'AMD', 'BYN', 'MDL', 'BAM', 'MKD', 'ALL', 'BOB', 'PYG', 'UYU', 'VES', 'CRC', 'DOP', 'GTQ', 'HNL', 'NIO', 'PAB', 'JMD', 'TTD', 'BBD', 'BSD', 'BZD', 'GYD', 'SRD', 'FJD', 'PGK', 'SBD', 'TOP', 'WST', 'VUV', 'MOP', 'BND', 'KPW', 'IRR', 'IQD', 'SYP', 'YER', 'AFN', 'MVR', 'BTN', 'MUR', 'SCR', 'MGA', 'MZN', 'ZMW', 'MWK', 'BWP', 'NAD', 'LSL', 'SZL', 'AOA', 'BIF', 'CDF', 'DJF', 'ERN', 'GMD', 'GNF', 'LRD', 'SDG', 'SOS', 'SSP', 'STN', 'SLL', 'CVE', 'KMF', 'SHP', 'GIP', 'FKP', 'IMP', 'JEP', 'GGP', 'ANG', 'AWG', 'BMD', 'KYD', 'XCD', 'TMT', 'KGS', 'TJS', 'LYD', 'MRU', 'RWF', 'HTG', 'CUP', 'CUC'];
+  // Split into integer and decimal parts
+  let [integerPart, decimalPart] = formattedAmount.split('.');
   
-  if (prefixCurrencies.includes(currencyCode)) {
+  // Add thousands separator to integer part (default comma, but customisable)
+  const thousandsSep = currency.thousandsSep || ',';
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
+  
+  // Recombine with decimal part if decimals > 0
+  if (decimals > 0 && decimalPart) {
+    const decimalSep = currency.decimalSep || '.';
+    formattedAmount = integerPart + decimalSep + decimalPart;
+  } else {
+    formattedAmount = integerPart;
+  }
+
+  // Determine symbol position (prefix or suffix)
+  const symbolPosition = getSymbolPosition(currencyCode);
+  
+  if (symbolPosition === 'prefix') {
     return `${currency.symbol}${formattedAmount}`;
   } else {
     return `${formattedAmount} ${currency.symbol}`;
