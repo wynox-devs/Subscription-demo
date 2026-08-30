@@ -30,9 +30,9 @@
 
     <img class="logo" src="Logo.png" alt="Wynox" />
 
-    <!-- CURRENCY SELECTOR -->
+    <!-- CURRENCY SELECTOR - SINGLE MENU -->
     <div class="currency-selector-container" id="currency-selector-container">
-      <button class="currency-trigger" id="currency-trigger" aria-label="Select currency">
+      <button class="currency-trigger" id="currency-trigger" aria-label="Select currency" aria-expanded="false">
         <span class="currency-flag" id="currency-flag-display">🇺🇸</span>
         <span class="currency-code" id="currency-code-display">USD</span>
         <span class="currency-symbol" id="currency-symbol-display">$</span>
@@ -41,7 +41,7 @@
         </svg>
       </button>
       
-      <div class="currency-dropdown" id="currency-dropdown" style="display: none;">
+      <div class="currency-dropdown" id="currency-dropdown">
         <div class="currency-search-container">
           <input 
             type="text" 
