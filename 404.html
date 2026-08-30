@@ -30,10 +30,37 @@
 
     <img class="logo" src="Logo.png" alt="Wynox" />
 
-    <!-- IP LOCATION -->
-    <p id="user-location" class="user-location">
-      Detecting location...
-    </p>
+    <!-- CURRENCY SELECTOR -->
+    <div class="currency-selector-container" id="currency-selector-container">
+      <button class="currency-trigger" id="currency-trigger" aria-label="Select currency">
+        <span class="currency-flag" id="currency-flag-display">🇺🇸</span>
+        <span class="currency-code" id="currency-code-display">USD</span>
+        <span class="currency-symbol" id="currency-symbol-display">$</span>
+        <svg class="currency-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+      
+      <div class="currency-dropdown" id="currency-dropdown" style="display: none;">
+        <div class="currency-search-container">
+          <input 
+            type="text" 
+            class="currency-search" 
+            id="currency-search" 
+            placeholder="Search currency..."
+            aria-label="Search currency"
+          />
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        
+        <div class="currency-list" id="currency-list">
+          <!-- Currency options will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
 
     <form class="signup" onsubmit="return false;">
 
@@ -71,6 +98,10 @@
 
       <div class="spacer"></div>
 
+      <div class="price" data-plan="free">
+        <span class="amount">$0</span>
+      </div>
+
       <div class="actions">
         <button type="button" class="btn outline">details</button>
         <button type="button" class="btn filled">Free</button>
@@ -85,10 +116,10 @@
 
       <div class="spacer"></div>
 
-      <p class="price">
+      <div class="price" data-plan="student">
         <span class="amount">$1/</span>
         <span class="period">month</span>
-      </p>
+      </div>
 
       <div class="actions">
         <button type="button" class="btn outline">details</button>
@@ -106,10 +137,10 @@
 
       <div class="spacer"></div>
 
-      <p class="price">
+      <div class="price" data-plan="pro">
         <span class="amount">$19/</span>
         <span class="period">month</span>
-      </p>
+      </div>
 
       <div class="actions">
         <button type="button" class="btn outline">details</button>
@@ -126,10 +157,10 @@
 
       <div class="spacer"></div>
 
-      <p class="price">
+      <div class="price" data-plan="family">
         <span class="amount">$25/</span>
         <span class="period">month</span>
-      </p>
+      </div>
 
       <div class="actions">
         <button type="button" class="btn outline">details</button>
@@ -141,8 +172,14 @@
 
   </main>
 
+  <!-- Toast notification container -->
+  <div class="toast" id="toast" role="alert" aria-live="polite">
+    <span class="toast-icon">✓</span>
+    <span class="toast-message" id="toast-message">Currency updated</span>
+    <button class="toast-close" id="toast-close" aria-label="Close notification">×</button>
+  </div>
+
   <!-- SCRIPTS -->
-  <script src="location.js"></script>
   <script src="pricing-updater.js"></script>
   <script>
     (function () {
@@ -170,6 +207,47 @@
       elements.forEach(function (element) {
         observer.observe(element);
       });
+    })();
+
+    // Toast notification handler
+    (function() {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      const toastClose = document.getElementById('toast-close');
+      
+      function showToast(message) {
+        if (!toast || !toastMessage) return;
+        
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        
+        // Auto hide after 3 seconds
+        setTimeout(() => {
+          hideToast();
+        }, 3000);
+      }
+      
+      function hideToast() {
+        if (toast) {
+          toast.classList.remove('show');
+        }
+      }
+      
+      // Close button handler
+      if (toastClose) {
+        toastClose.addEventListener('click', hideToast);
+      }
+      
+      // Listen for currency changes
+      window.addEventListener('currencyChange', (e) => {
+        if (e.detail && e.detail.currency) {
+          showToast(`Currency changed to ${e.detail.currency}`);
+        }
+      });
+      
+      // Expose toast for other scripts
+      window.showToast = showToast;
+      window.hideToast = hideToast;
     })();
   </script>
 
