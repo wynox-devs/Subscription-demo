@@ -45,14 +45,54 @@ const COUNTRY_PRICING = {
   ZA: { currency: "ZAR", symbol: "R", free: 0, student: 15, pro: 280, family: 360 }
 };
 
+// Timezone to country code mapping
+const TIMEZONE_TO_COUNTRY = {
+  "Europe/London": "GB",
+  "Europe/Paris": "FR",
+  "Europe/Berlin": "DE",
+  "Europe/Madrid": "ES",
+  "Europe/Rome": "IT",
+  "Europe/Amsterdam": "NL",
+  "Europe/Brussels": "BE",
+  "Europe/Zurich": "CH",
+  "Europe/Vienna": "AT",
+  "Europe/Warsaw": "PL",
+  "Europe/Stockholm": "SE",
+  "Europe/Oslo": "NO",
+  "Europe/Athens": "GR",
+  "Europe/Dublin": "IE",
+  "Europe/Prague": "CZ",
+  "Europe/Budapest": "HU",
+  "Europe/Lisbon": "PT",
+  "Europe/Copenhagen": "DK",
+  "Asia/Tokyo": "JP",
+  "Asia/Shanghai": "CN",
+  "Asia/Hong_Kong": "CN",
+  "Asia/Kolkata": "IN",
+  "Asia/Singapore": "SG",
+  "Asia/Seoul": "KR",
+  "Asia/Bangkok": "TH",
+  "Australia/Sydney": "AU",
+  "Pacific/Auckland": "NZ",
+  "America/Toronto": "CA",
+  "America/Mexico_City": "MX",
+  "America/Sao_Paulo": "BR",
+  "America/New_York": "US",
+  "America/Los_Angeles": "US",
+  "America/Chicago": "US",
+  "America/Denver": "US",
+  "America/Anchorage": "US",
+  "Pacific/Honolulu": "US",
+  "Asia/Dubai": "AE",
+  "Asia/Riyadh": "SA",
+  "Africa/Johannesburg": "ZA"
+};
+
 // Global location object
 window.userLocation = {
   country: null,
   countryCode: null,
   region: null,
-  city: null,
-  latitude: null,
-  longitude: null,
   timezone: null,
   displayText: "Detecting location...",
   pricing: null,
@@ -61,39 +101,81 @@ window.userLocation = {
 };
 
 /**
- * Fetch user location from IP
+ * Detect user region from system settings (no IP collection)
  */
-async function getUserLocation() {
+function getSystemRegion() {
   try {
-    const response = await fetch("https://ipapi.co/json/");
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch location data");
+    // Get timezone from system
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    // Get language/region from browser locale
+    const locale = navigator.language || navigator.userLanguage || "en-US";
+    
+    // Extract country code from locale (e.g., "de-DE" -> "DE")
+    let countryCode = locale.split("-")[1]?.toUpperCase() || null;
+    
+    // Try timezone-based country detection if locale doesn't have country code
+    if (!countryCode && timezone) {
+      countryCode = TIMEZONE_TO_COUNTRY[timezone] || null;
     }
+    
+    // Fallback to default if no country code found
+    if (!countryCode) {
+      countryCode = "US";
+    }
+    
+    return {
+      countryCode: countryCode,
+      timezone: timezone,
+      locale: locale
+    };
+  } catch (error) {
+    console.error("✗ System region detection error:", error);
+    return {
+      countryCode: "US",
+      timezone: null,
+      locale: "en-US"
+    };
+  }
+}
 
-    const data = await response.json();
+/**
+ * Get country name from country code
+ */
+function getCountryName(countryCode) {
+  try {
+    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+    return regionNames.of(countryCode) || null;
+  } catch (error) {
+    console.error("✗ Could not get country name:", error);
+    return null;
+  }
+}
 
-    // Extract country code
-    const countryCode = data.country_code || null;
-
+/**
+ * Initialize user location from system settings
+ */
+function initializeUserLocation() {
+  try {
+    const regionInfo = getSystemRegion();
+    const countryCode = regionInfo.countryCode;
+    const countryName = getCountryName(countryCode) || "Unknown";
+    
     // Get pricing for this country
     const pricing = COUNTRY_PRICING[countryCode] || COUNTRY_PRICING.default;
-
+    
     // Update global location object
     window.userLocation = {
-      country: data.country_name || null,
+      country: countryName,
       countryCode: countryCode,
-      region: data.region || null,
-      city: data.city || null,
-      latitude: data.latitude || null,
-      longitude: data.longitude || null,
-      timezone: data.timezone || null,
-      displayText: formatLocationDisplay(data),
+      region: regionInfo.locale,
+      timezone: regionInfo.timezone,
+      displayText: formatLocationDisplay(countryName, regionInfo.timezone),
       pricing: pricing,
       isLoading: false,
       error: null
     };
-
+    
     // Update UI
     updateLocationDisplay();
     
@@ -103,22 +185,25 @@ async function getUserLocation() {
         detail: window.userLocation
       })
     );
-
-    console.log("✓ Location detected:", window.userLocation);
-
+    
+    console.log("✓ Location detected from system:", window.userLocation);
+    
   } catch (error) {
-    console.error("✗ Location error:", error);
-
+    console.error("✗ Location detection error:", error);
+    
     window.userLocation = {
-      ...window.userLocation,
-      pricing: COUNTRY_PRICING.default,
+      countryCode: "US",
+      country: "United States",
+      region: null,
+      timezone: null,
       displayText: "Location unavailable",
+      pricing: COUNTRY_PRICING.default,
       isLoading: false,
       error: error.message
     };
-
+    
     updateLocationDisplay();
-
+    
     document.dispatchEvent(
       new CustomEvent("locationError", {
         detail: { error: error.message }
@@ -130,15 +215,9 @@ async function getUserLocation() {
 /**
  * Format location display text
  */
-function formatLocationDisplay(data) {
-  const city = data.city || "";
-  const region = data.region || "";
-  const country = data.country_name || "";
-
-  if (city && country) {
-    return `${city}, ${country}`;
-  } else if (region && country) {
-    return `${region}, ${country}`;
+function formatLocationDisplay(country, timezone) {
+  if (country && timezone) {
+    return `${country} (${timezone})`;
   } else if (country) {
     return country;
   }
@@ -182,5 +261,5 @@ window.getCurrencyInfo = function() {
   return window.userLocation.pricing || COUNTRY_PRICING.default;
 };
 
-// Initialize location detection
-getUserLocation();
+// Initialize location detection from system settings
+initializeUserLocation();
