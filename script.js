@@ -1,32 +1,46 @@
+"use strict";
+
 (function () {
-  "use strict";
 
   const elements = document.querySelectorAll(".reveal");
 
-  // Fallback for browsers without IntersectionObserver
+  // Browser doesn't support IntersectionObserver
   if (!("IntersectionObserver" in window)) {
-    elements.forEach((element) => {
+
+    elements.forEach(function (element) {
       element.classList.add("visible");
     });
+
     return;
   }
 
   const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
+
+    function (entries) {
+
+      entries.forEach(function (entry) {
+
         if (entry.isIntersecting) {
+
           entry.target.classList.add("visible");
+
           observer.unobserve(entry.target);
         }
+
       });
+
     },
+
     {
       threshold: 0.15,
       rootMargin: "0px 0px -60px 0px"
     }
+
   );
 
-  elements.forEach((element) => {
+
+  elements.forEach(function (element) {
     observer.observe(element);
   });
+
 })();
