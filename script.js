@@ -1,11 +1,9 @@
 // Subscription Plans Configuration
 const plans = {
-    Free: { price: 0, storage: '5 GB', features: ['Basic Support', '1 Project'] },
-    Basic: { price: 9, storage: '100 GB', features: ['Email Support', '10 Projects', 'Basic Analytics'] },
-    Advanced: { price: 29, storage: '500 GB', features: ['Priority Support', '50 Projects', 'Advanced Analytics', 'Team Collaboration'] },
-    Pro: { price: 59, storage: '2 TB', features: ['24/7 Phone Support', 'Unlimited Projects', 'Advanced Analytics', 'Priority Support', 'Custom Domain'] },
-    Max: { price: 99, storage: '5 TB', features: ['Dedicated Support', 'Unlimited Projects', 'Enterprise Analytics', 'Custom Domain'] },
-    Ultra: { price: 199, storage: '10 TB', features: ['Dedicated Account Manager', 'Unlimited Projects', 'Custom Analytics', '24/7 Priority Support', 'Multiple Custom Domains'] }
+    Free: { price: 0, storage: '5 GB', features: ['5 GB Storage', 'Basic Support', '1 Project'] },
+    Student: { price: 19, storage: '500 GB', features: ['500 GB Storage', 'Email Support', '10 Projects', 'Basic Analytics'] },
+    Family: { price: 39, storage: '1 TB', features: ['1 TB Shared Storage', 'Priority Email Support', '25 Projects', 'Advanced Analytics', 'Team Collaboration'] },
+    Pro: { price: 59, storage: '2 TB', features: ['2 TB Storage', '24/7 Phone Support', 'Unlimited Projects', 'Advanced Analytics', 'Priority Support', 'Custom Domain'] }
 };
 
 // Get input elements
@@ -147,7 +145,7 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Preview modal functions (unchanged)
+// Preview modal functions
 function showPreview(planName) {
     const modal = document.getElementById('previewModal');
     const titleEl = document.getElementById('previewTitle');
