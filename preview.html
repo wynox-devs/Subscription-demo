@@ -58,10 +58,10 @@
         const plan = qs('plan') || 'Student';
 
         const plans = {
-            'Free': { price: 0, features: ['5 GB Storage','Basic Support','1 Project'] },
-            'Student': { price: 19, features: ['500 GB Storage','Email Support','10 Projects','Basic Analytics'] },
-            'Family': { price: 39, features: ['1 TB Shared Storage','Priority Email Support','25 Projects','Advanced Analytics','Team Collaboration'] },
-            'Pro': { price: 59, features: ['2 TB Storage','24/7 Phone Support','Unlimited Projects','Advanced Analytics','Priority Support','Custom Domain'] }
+            'Free': { price: 0},
+            'Student': { price: 19}
+            'Family': { price: 39 },
+            'Pro': { price: 59}
         };
 
         const data = plans[plan] || plans['Student'];
