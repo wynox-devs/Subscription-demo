@@ -161,9 +161,14 @@ const CURRENCIES = {
 // ==================== BASE PRICES (USD) ====================
 const BASE_PRICES = {
   free: 0,
-  student: 1,
-  pro: 19,
-  family: 25
+  student_pro: 1,
+  student_premium:,
+  duo_pro:
+  duo_premium
+  personal_pro: 19,
+  personal_premium
+  family_pro: 25,
+  family_premium:
 };
 
 // ==================== STATE MANAGEMENT ====================
