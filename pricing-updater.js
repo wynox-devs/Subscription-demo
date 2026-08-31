@@ -162,13 +162,13 @@ const CURRENCIES = {
 const BASE_PRICES = {
   free: 0,
   student_pro: 1,
-  student_premium:,
-  duo_pro:
-  duo_premium
-  personal_pro: 19,
-  personal_premium
-  family_pro: 25,
-  family_premium:
+  student_premium: 1.5,
+  personal_pro: 9,
+  personal_premium: 14,
+  duo_pro: 16,
+  duo_premium: 19,
+  family_pro: 24,
+  family_premium: 30
 };
 
 // ==================== STATE MANAGEMENT ====================
