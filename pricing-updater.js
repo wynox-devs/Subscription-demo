@@ -162,7 +162,7 @@ const CURRENCIES = {
 const BASE_PRICES = {
   free: 0,
   student_pro: 1,
-  student_premium: 1.5,
+  student_premium: 1.25,
   personal_pro: 9,
   personal_premium: 14,
   duo_pro: 16,
